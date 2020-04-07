@@ -1,7 +1,22 @@
 dwm - dynamic window manager
 ============================
 dwm is an extremely fast, small, and dynamic window manager for X.
+This version is customised with quite a few patches
 
+Patches Added
+-------------
+alpha
+alternativetags
+autostart
+barpadding
+movestack
+scratchpad
+shiftview
+statuspadding
+systray
+vanitygaps
+xrdb
+fibbonacci 
 
 Requirements
 ------------
@@ -46,3 +61,9 @@ Configuration
 -------------
 The configuration of dwm is done by creating a custom config.h
 and (re)compiling the source code.
+
+Credits
+-------
+All the original suckless devs
+
+Huge thank you to https://github.com/bakkeby for flexipatch which helped me include all the patches without days of troubleshooting  
