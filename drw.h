@@ -12,11 +12,7 @@ typedef struct Fnt {
 	struct Fnt *next;
 } Fnt;
 
-#if FLOAT_BORDER_COLOR_PATCH
-enum { ColFg, ColBg, ColBorder, ColFloat }; /* Clr scheme index */
-#else
 enum { ColFg, ColBg, ColBorder }; /* Clr scheme index */
-#endif // FLOAT_BORDER_COLOR_PATCH
 typedef XftColor Clr;
 
 typedef struct {
@@ -24,11 +20,9 @@ typedef struct {
 	Display *dpy;
 	int screen;
 	Window root;
-	#if ALPHA_PATCH
 	Visual *visual;
 	unsigned int depth;
 	Colormap cmap;
-	#endif // ALPHA_PATCH
 	Drawable drawable;
 	GC gc;
 	Clr *scheme;
@@ -36,11 +30,7 @@ typedef struct {
 } Drw;
 
 /* Drawable abstraction */
-#if ALPHA_PATCH
 Drw *drw_create(Display *dpy, int screen, Window win, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap);
-#else
-Drw *drw_create(Display *dpy, int screen, Window win, unsigned int w, unsigned int h);
-#endif // ALPHA_PATCH
 void drw_resize(Drw *drw, unsigned int w, unsigned int h);
 void drw_free(Drw *drw);
 
@@ -54,27 +44,13 @@ void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned in
 void drw_clr_create(
 	Drw *drw,
 	Clr *dest,
-	#if VTCOLORS_PATCH
-	const char clrname[]
-	#else
 	const char *clrname
-	#endif // VTCOLORS_PATCH
-	#if ALPHA_PATCH
 	, unsigned int alpha
-	#endif // ALPHA_PATCH
 );
 Clr *drw_scm_create(
 	Drw *drw,
-	#if VTCOLORS_PATCH
-	char clrnames[][8],
-	#elif XRDB_PATCH
 	char *clrnames[],
-	#else
-	const char *clrnames[],
-	#endif // VTCOLORS_PATCH / XRDB_PATCH
-	#if ALPHA_PATCH
 	const unsigned int alphas[],
-	#endif // ALPHA_PATCH
 	size_t clrcount
 );
 

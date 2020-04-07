@@ -63,10 +63,8 @@ updatesystray(void)
 	Monitor *m = systraytomon(NULL);
 	unsigned int x = m->mx + m->mw;
 	unsigned int w = 1, xpad = 0, ypad = 0;
-	#if BARPADDING_PATCH
 	xpad = sp;
 	ypad = vp;
-	#endif // BARPADDING_PATCH
 
 	if (!showsystray)
 		return;
@@ -79,22 +77,15 @@ updatesystray(void)
 		wa.event_mask = ButtonPressMask|ExposureMask;
 		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
 		wa.border_pixel = 0;
-		#if ALPHA_PATCH
 		wa.colormap = cmap;
 		systray->win = XCreateWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, depth,
 						InputOutput, visual,
 						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
-		#else
-		systray->win = XCreateSimpleWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, 0, scheme[SchemeNorm][ColBg].pixel);
-		XChangeWindowAttributes(dpy, systray->win, CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWEventMask, &wa);
-		#endif // ALPHA_PATCH
 		XSelectInput(dpy, systray->win, SubstructureNotifyMask);
 		XChangeProperty(dpy, systray->win, netatom[NetSystemTrayOrientation], XA_CARDINAL, 32,
 				PropModeReplace, (unsigned char *)&systrayorientation, 1);
-		#if ALPHA_PATCH
 		XChangeProperty(dpy, systray->win, netatom[NetSystemTrayVisual], XA_VISUALID, 32,
 				PropModeReplace, (unsigned char *)&visual->visualid, 1);
-		#endif // ALPHA_PATCH
 		XChangeProperty(dpy, systray->win, netatom[NetWMWindowType], XA_ATOM, 32,
 				PropModeReplace, (unsigned char *)&netatom[NetWMWindowTypeDock], 1);
 		XMapRaised(dpy, systray->win);
