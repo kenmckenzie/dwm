@@ -2,10 +2,12 @@
 #include "alpha.h"
 #include "alternativetags.h"
 #include "autostart.h"
+#include "cyclelayouts.h"
+#include "fullscreen.h"
 #include "movestack.h"
 #include "scratchpad.h"
 #include "shiftview.h"
-#include "systray.h"
+#include "togglefullscreen.h"
 #include "vanitygaps.h"
 #include "xrdb.h"
 /* Layouts */

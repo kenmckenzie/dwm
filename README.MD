@@ -13,10 +13,12 @@ movestack
 scratchpad
 shiftview
 statuspadding
-systray
 vanitygaps
 xrdb
-fibbonacci 
+fibbonacci
+dwmblocks
+cyclelayout
+fullscreen & toggle fullscreen
 
 Requirements
 ------------
@@ -56,11 +58,15 @@ like this in your .xinitrc:
     done &
     exec dwm
 
+Note that this dwm is patched to allow clickable dwmblocks, also included in
+my repos so that is the recomended option
 
 Configuration
 -------------
-The configuration of dwm is done by creating a custom config.h
+The configuration of dwm is done by creating a custom config.def.h
 and (re)compiling the source code.
+
+Please see the config for the changes I made 
 
 Credits
 -------

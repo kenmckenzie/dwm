@@ -14,12 +14,8 @@ static const int vertpad                 = 3;  /* vertical padding of bar */
 static const int sidepad                 = 3;  /* horizontal padding of bar */
 static const int horizpadbar             = 2;   /* horizontal padding for statusbar */
 static const int vertpadbar              = 10;   /* vertical padding for statusbar */
-static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
-static const unsigned int systrayspacing = 2;   /* systray spacing */
-static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
-static const int showsystray             = 1;   /* 0 means no systray */
-static const char *fonts[]               = { "Hack Nerd Font:size=14" };
-static const char dmenufont[]            = "Hack Nerd Font:size=14";
+static const char *fonts[]               = { "Hack Nerd Font:size=12" };
+static const char dmenufont[]            = "Hack Nerd Font:size=12";
 
 static char normfgcolor[]                = "#bbbbbb";
 static char normbgcolor[]                = "#222222";
@@ -58,9 +54,11 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 *	WM_WINDOW_ROLE(STRING) = role
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class           instance    title       tags mask     isfloating   monitor */
+	{ "Gimp",          NULL,       NULL,       0,            1,           -1 },
+/*	{ "Firefox",       NULL,       NULL,       1 << 8,       0,           -1 },*/
+	{ "Brave-browser",  NULL,      NULL,       1 << 1,       0,           -1 },
+	{ "Spotify",       "spotify",  "Spotify",  1 << 3,       0,           -1 },
 };
 
 
@@ -81,6 +79,7 @@ static const Layout layouts[] = {
 	{ "[M]",      monocle },
 	{ "(@)",      spiral },
 	{ "[\\]",     dwindle },
+	{ NULL,       NULL },
 };
 
 /* key definitions */
@@ -114,25 +113,26 @@ static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 #include <X11/XF86keysym.h> /* include's media keys */
 static Key keys[] = {
-	/* modifier                     key            function                argument */
-	{ MODKEY,                       XK_d,          spawn,                  {.v = dmenucmd } },
-	{ MODKEY,        			    XK_Return,     spawn,                  {.v = termcmd } },
-	{ MODKEY|ShiftMask,				XK_d,		   spawn,      		       SHCMD("rofi -modi 'window,run,ssh,drun' -show run")  },
-	{ MODKEY,	           		    XK_q,      	   killclient,		       {0} },
-    { MODKEY,                       XK_F1,     	   spawn,     	           SHCMD("code") },
-    { MODKEY,                       XK_F2,         spawn,     	   	   	   SHCMD("$BROWSER") },
-    { MODKEY|ShiftMask,             XK_F3,         spawn,          		   SHCMD("pkexec thunar") },
-    { MODKEY,                       XK_F3,         spawn,         		   SHCMD("thunar") },
-    { MODKEY,                       XK_F4,         spawn,          		   SHCMD("spotify") },
-	{ MODKEY,						XK_z,		   spawn,				   SHCMD("rofimenu") },
-	{ 0, 							XF86XK_AudioMute,		spawn,		   SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle") },
-	{ 0, 							XF86XK_AudioRaiseVolume,	spawn,	   SHCMD("volumenotify +5%") },
-	{ 0, 							XF86XK_AudioLowerVolume,	spawn,	   SHCMD("volumenotify -5%") },
-	{ 0, 							XF86XK_AudioPrev,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous || playerctl -p spotifyd previous") },
-	{ 0, 							XF86XK_AudioNext,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next || playerctl -p spotifyd next") },
-	{ 0, 							XF86XK_AudioPause,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause || playerctl -p spotifyd pause") },
-	{ 0, 							XF86XK_AudioPlay,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play || playerctl -p spotifyd play") },
-	{ 0,				 			XK_Print,   			spawn,		   SHCMD("scrot && notify-send Taking Screenshot") },
+	/* modifier              key            function                argument */
+	{ MODKEY,                XK_d,          spawn,                  {.v = dmenucmd } },
+	{ MODKEY,                XK_Return,     spawn,                  {.v = termcmd } },
+	{ MODKEY|ShiftMask, 	 XK_d,	        spawn,      		       SHCMD("rofi -modi 'window,run,ssh,drun' -show run")  },
+	{ MODKEY,	       	 XK_q,          killclient,		       {0} },
+ 	{ MODKEY,                XK_F1,         spawn,     	           SHCMD("atom") },
+	{ MODKEY|ShiftMask,      XK_F1,         spawn,     	           SHCMD("pkexec atom") },
+  { MODKEY,                XK_F2,         spawn,     	   	   	   SHCMD("$BROWSER") },
+  { MODKEY|ShiftMask,      XK_F3,         spawn,          		   SHCMD("pkexec thunar") },
+  { MODKEY,                XK_F3,         spawn,         		   SHCMD("thunar") },
+  { MODKEY,                XK_F4,         spawn,          		   SHCMD("spotify") },
+	{ MODKEY,		 XK_z,		   spawn,				   SHCMD("rofimenu") },
+	{ 0, 			 XF86XK_AudioMute,		spawn,		   SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle") },
+	{ 0, 			 XF86XK_AudioRaiseVolume,	spawn,	   SHCMD("volumenotify +5") },
+	{ 0, 		   XF86XK_AudioLowerVolume,	spawn,	   SHCMD("volumenotify -5") },
+	{ 0, 			 XF86XK_AudioPrev,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous || playerctl -p spotifyd previous") },
+	{ 0, 			 XF86XK_AudioNext,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next || playerctl -p spotifyd next") },
+	{ 0, 			 XF86XK_AudioStop,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop || playerctl -p spotifyd pause") },
+	{ 0, 			 XF86XK_AudioPlay,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause || playerctl -p spotifyd play") },
+	{ 0,			 XK_Print,   			spawn,		   SHCMD("scrot && notify-send Taking Screenshot") },
 	{ MODKEY,                       XK_grave,      togglescratch,          {.v = scratchpadcmd } },
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
@@ -143,7 +143,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_l,          setmfact,               {.f = +0.05} },
 	{ MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
-	{ MODKEY|ShiftMask,                       XK_Return,     zoom,                   {0} },
+	{ MODKEY|ShiftMask,             XK_Return,     zoom,                   {0} },
 	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,               {.i = +1 } },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,          incrgaps,               {.i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_i,          incrigaps,              {.i = +1 } },
@@ -161,8 +161,8 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask,              XK_0,          togglegaps,             {0} },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
-	{ MODKEY,             XK_semicolon,        shiftview,              { .i = -1 } },
-	{ MODKEY,             XK_apostrophe, 	   shiftview,              { .i = +1 } },
+	{ MODKEY,             		XK_semicolon,        shiftview,              { .i = -1 } },
+	{ MODKEY,            		XK_apostrophe, 	   shiftview,              { .i = +1 } },
 	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
 	{ MODKEY|ShiftMask,             XK_q,          quit,                   {0} },
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
@@ -171,6 +171,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,      setlayout,              {0} },
 	{ MODKEY|ShiftMask,             XK_space,      togglefloating,         {0} },
+	{ MODKEY,                       XK_y,          togglefullscreen,       {0} },
+	{ MODKEY|ShiftMask,             XK_f,          fullscreen,             {0} },
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,      focusmon,               {.i = -1 } },
@@ -178,6 +180,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,      tagmon,                 {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period,     tagmon,                 {.i = +1 } },
 	{ MODKEY,                       XK_n,          togglealttag,           {0} },
+	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
 	TAGKEYS(                        XK_1,                                  0)
 	TAGKEYS(                        XK_2,                                  1)
 	TAGKEYS(                        XK_3,                                  2)
@@ -196,7 +200,9 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,                   Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
+	{ ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
+	{ ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
 	{ ClkClientWin,         MODKEY,              Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,              Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,              Button3,        resizemouse,    {0} },
