@@ -6,18 +6,31 @@ This version is customised with quite a few patches
 Patches Added
 -------------
 alpha
+
 alternativetags
+
 autostart
+
 barpadding
+
 movestack
+
 scratchpad
+
 shiftview
+
 statuspadding
+
 vanitygaps
+
 xrdb
+
 fibbonacci
+
 dwmblocks
+
 cyclelayout
+
 fullscreen & toggle fullscreen
 
 Requirements
@@ -66,7 +79,7 @@ Configuration
 The configuration of dwm is done by creating a custom config.def.h
 and (re)compiling the source code.
 
-Please see the config for the changes I made 
+Please see the config for the changes I made
 
 Credits
 -------
