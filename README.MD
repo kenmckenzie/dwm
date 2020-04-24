@@ -6,31 +6,18 @@ This version is customised with quite a few patches
 Patches Added
 -------------
 alpha
-
 alternativetags
-
 autostart
-
 barpadding
-
 movestack
-
 scratchpad
-
 shiftview
-
 statuspadding
-
 vanitygaps
-
 xrdb
-
 fibbonacci
-
 dwmblocks
-
 cyclelayout
-
 fullscreen & toggle fullscreen
 
 Requirements
