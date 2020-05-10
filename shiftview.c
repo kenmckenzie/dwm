@@ -1,6 +1,5 @@
 void
-shiftview(const Arg *arg)
-{
+shiftview(const Arg *arg) {
 	Arg shifted;
 
 	if(arg->i > 0) // left circular shift

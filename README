@@ -1,38 +1,21 @@
 dwm - dynamic window manager
 ============================
 dwm is an extremely fast, small, and dynamic window manager for X.
-This version is customised with quite a few patches
-
-Patches Added
--------------
-
-alpha
-
+This is my personal build with the following patches added
+actualfullscreen
 alternativetags
-
-autostart
-
 barpadding
-
+cyclelayouts
+fibonacci
+fullscreen
 movestack
-
 scratchpad
-
-shiftview
-
 statuspadding
-
 vanitygaps
-
 xrdb
+dwmblocks 
 
-fibbonacci
-
-dwmblocks
-
-cyclelayout
-
-fullscreen & toggle fullscreen
+Please check the config.def.h file for bindings
 
 Requirements
 ------------
@@ -72,18 +55,8 @@ like this in your .xinitrc:
     done &
     exec dwm
 
-Note that this dwm is patched to allow clickable dwmblocks, also included in
-my repos so that is the recomended option
 
 Configuration
 -------------
-The configuration of dwm is done by creating a custom config.def.h
+The configuration of dwm is done by creating a custom config.h
 and (re)compiling the source code.
-
-Please see the config for the changes I made
-
-Credits
--------
-All the original suckless devs
-
-Huge thank you to https://github.com/bakkeby for flexipatch which helped me include all the patches without days of troubleshooting  
