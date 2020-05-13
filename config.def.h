@@ -72,7 +72,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-i", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
@@ -82,88 +82,89 @@ static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34
 #include "shiftview.c"
 
 static Key keys[] = {
-	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY|ShiftMask, 	 XK_d,	        spawn,      		       SHCMD("rofi -modi 'window,run,ssh,drun' -show run")  },
-	{ MODKEY,	       	 XK_q,          killclient,		       {0} },
- 	{ MODKEY,                XK_F1,         spawn,     	           SHCMD("atom") },
-	{ MODKEY|ShiftMask,      XK_F1,         spawn,     	           SHCMD("pkexec atom") },
-        { MODKEY,                XK_F2,         spawn,     	   	   	   SHCMD("$BROWSER") },
-        { MODKEY|ShiftMask,      XK_F3,         spawn,          		   SHCMD("pkexec thunar") },
-        { MODKEY,                XK_F3,         spawn,         		   SHCMD("thunar") },
-        { MODKEY,                XK_F4,         spawn,          		   SHCMD("spotify") },
-	{ MODKEY|ShiftMask,      XK_F5,         xrdb,                   {.v = NULL } },
-	{ MODKEY,     		 XK_F5,         spawn,                   SHCMD("Sxiv") },
-	{ MODKEY,		 XK_z,		   spawn,		   SHCMD("rofimenu") },
-	{ 0, 			 XF86XK_AudioMute,		spawn,		   SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle") },
-	{ 0, 			 XF86XK_AudioRaiseVolume,	spawn,	   SHCMD("volumenotify +5 && pkill -RTMIN+10 dwmblocks") },
-	{ 0, 		         XF86XK_AudioLowerVolume,	spawn,	   SHCMD("volumenotify -5 && pkill -RTMIN+10 dwmblocks") },
-	{ 0, 			 XF86XK_AudioPrev,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous || playerctl -p spotifyd previous") },
-	{ 0, 			 XF86XK_AudioNext,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next || playerctl -p spotifyd next") },
-	{ 0, 			 XF86XK_AudioStop,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop || playerctl -p spotifyd pause") },
-	{ 0, 			 XF86XK_AudioPlay,		spawn,		   SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause || playerctl -p spotifyd play") },
-	{ 0,			 XK_Print,   			spawn,		   SHCMD("scrot && notify-send Taking Screenshot") },
-	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
-	{ MODKEY,             XK_semicolon,        shiftview,              { .i = -1 } },
-	{ MODKEY,             XK_apostrophe,  shiftview,              { .i = +1 } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY|ControlMask,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|Mod4Mask,              XK_h,      incrgaps,       {.i = +1 } },
-	{ MODKEY|Mod4Mask,              XK_l,      incrgaps,       {.i = -1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_h,      incrogaps,      {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_l,      incrogaps,      {.i = -1 } },
-	{ MODKEY|Mod4Mask|ControlMask,  XK_h,      incrigaps,      {.i = +1 } },
-	{ MODKEY|Mod4Mask|ControlMask,  XK_l,      incrigaps,      {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_0,      togglegaps,     {0} },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,      defaultgaps,    {0} },
-	{ MODKEY,                       XK_y,      incrihgaps,     {.i = +1 } },
-	{ MODKEY,                       XK_o,      incrihgaps,     {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_y,      incrivgaps,     {.i = +1 } },
-	{ MODKEY|ControlMask,           XK_o,      incrivgaps,     {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_y,      incrohgaps,     {.i = +1 } },
-	{ MODKEY|Mod4Mask,              XK_o,      incrohgaps,     {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_y,      incrovgaps,     {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_o,      incrovgaps,     {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_r,      setlayout,      {.v = &layouts[3]} },
-	{ MODKEY|ShiftMask,             XK_r,      setlayout,      {.v = &layouts[4]} },
-	{ MODKEY,	          	XK_comma,  cyclelayout,    {.i = -1 } },
-	{ MODKEY,                       XK_period, cyclelayout,    {.i = +1 } },
-	{ MODKEY|ControlMask,           XK_f,      fullscreen,     {0} },
-	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_n,      togglealttag,   {0} },
-	{ MODKEY,                       XK_F5,     xrdb,           {.v = NULL } },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	/* modifier                     key                         function        argument */
+	{ MODKEY,                       XK_d,                       spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_d,                       spawn,          SHCMD("i3-dmenu-desktop") },
+	{ MODKEY,                       XK_Return,                  spawn,          {.v = termcmd } },
+	{ MODKEY,	       	        XK_q,                       killclient,	    {0} },
+ 	{ MODKEY,                       XK_F1,                      spawn,     	    SHCMD("atom") },
+	{ MODKEY|ShiftMask,             XK_F1,                      spawn,          SHCMD("pkexec atom") },
+        { MODKEY,                       XK_F2,                      spawn,     	    SHCMD("$BROWSER") },
+        { MODKEY|ShiftMask,             XK_F3,                      spawn,          SHCMD("pkexec thunar") },
+        { MODKEY,                       XK_F3,                      spawn,          SHCMD("thunar") },
+        { MODKEY,                       XK_F4,                      spawn,          SHCMD("spotify") },
+	{ MODKEY|ShiftMask,             XK_F5,                      xrdb,           {.v = NULL } },
+	{ MODKEY,     		        XK_F5,                      spawn,          SHCMD("Sxiv") },
+	{ MODKEY,		        XK_z,	               	    spawn,	    SHCMD("rofimenu") },
+	{ MODKEY|ShiftMask, 	        XK_z,	                    spawn,          SHCMD("rofi -modi 'window,run,ssh,drun' -show run")  },
+	{ 0, 			        XF86XK_AudioMute,	    spawn,	    SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle") },
+	{ 0, 			        XF86XK_AudioRaiseVolume,    spawn,	    SHCMD("volumenotify +5 && pkill -RTMIN+10 dwmblocks") },
+	{ 0, 		                XF86XK_AudioLowerVolume,    spawn,	    SHCMD("volumenotify -5 && pkill -RTMIN+10 dwmblocks") },
+	{ 0, 			        XF86XK_AudioPrev,	    spawn,	    SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous || playerctl -p spotifyd previous") },
+	{ 0, 	        	        XF86XK_AudioNext,	    spawn,	    SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next || playerctl -p spotifyd next") },
+	{ 0, 			        XF86XK_AudioStop,           spawn,	    SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop || playerctl -p spotifyd pause") },
+	{ 0,    		        XF86XK_AudioPlay,           spawn,          SHCMD("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause || playerctl -p spotifyd play") },
+	{ 0,			        XK_Print,   	            spawn,	    SHCMD("scrot && notify-send Taking Screenshot") },
+	{ MODKEY,                       XK_grave, 		    togglescratch,  {.v = scratchpadcmd } },
+	{ MODKEY,                       XK_semicolon,               shiftview,      { .i = -1 } },
+	{ MODKEY,                       XK_apostrophe,              shiftview,      { .i = +1 } },
+	{ MODKEY,                       XK_b,                       togglebar,      {0} },
+	{ MODKEY,                       XK_j,                       focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_k,                       focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_i,                       incnmaster,     {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_d,                       incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_h,                       setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_l,                       setmfact,       {.f = +0.05} },
+	{ MODKEY|Mod4Mask,              XK_h,                       incrgaps,       {.i = +1 } },
+	{ MODKEY|Mod4Mask,              XK_l,                       incrgaps,       {.i = -1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_h,                       incrogaps,      {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_l,                       incrogaps,      {.i = -1 } },
+	{ MODKEY|Mod4Mask|ControlMask,  XK_h,                       incrigaps,      {.i = +1 } },
+	{ MODKEY|Mod4Mask|ControlMask,  XK_l,                       incrigaps,      {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_0,                       togglegaps,     {0} },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,                       defaultgaps,    {0} },
+	{ MODKEY,                       XK_y,                       incrihgaps,     {.i = +1 } },
+	{ MODKEY,                       XK_o,                       incrihgaps,     {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_y,                       incrivgaps,     {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_o,                       incrivgaps,     {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_y,                       incrohgaps,     {.i = +1 } },
+	{ MODKEY|Mod4Mask,              XK_o,                       incrohgaps,     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_y,                       incrovgaps,     {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_o,                       incrovgaps,     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_j,                       movestack,      {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,                       movestack,      {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_Return,                  zoom,           {0} },
+	{ MODKEY,                       XK_Tab,                     view,           {0} },
+	{ MODKEY|ShiftMask,             XK_c,                       killclient,     {0} },
+	{ MODKEY,                       XK_t,                       setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_f,                       setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_m,                       setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_r,                       setlayout,      {.v = &layouts[3]} },
+	{ MODKEY|ShiftMask,             XK_r,                       setlayout,      {.v = &layouts[4]} },
+	{ MODKEY,	          	XK_comma,                   cyclelayout,    {.i = -1 } },
+	{ MODKEY,                       XK_period,                  cyclelayout,    {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_f,                       fullscreen,     {0} },
+	{ MODKEY|ShiftMask,             XK_f,                       togglefullscr,  {0} },
+	{ MODKEY,                       XK_space,                   setlayout,      {0} },
+	{ MODKEY|ShiftMask,             XK_space,                   togglefloating, {0} },
+	{ MODKEY,                       XK_0,                       view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,                       tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_comma,                   focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_period,                  focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_comma,                   tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_period,                  tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_n,                       togglealttag,   {0} },
+	{ MODKEY,                       XK_F5,                      xrdb,           {.v = NULL } },
+	TAGKEYS(                        XK_1,                                       0)
+	TAGKEYS(                        XK_2,                                       1)
+	TAGKEYS(                        XK_3,                                       2)
+	TAGKEYS(                        XK_4,                                       3)
+	TAGKEYS(                        XK_5,                                       4)
+	TAGKEYS(                        XK_6,                                       5)
+	TAGKEYS(                        XK_7,                                       6)
+	TAGKEYS(                        XK_8,                                       7)
+	TAGKEYS(                        XK_9,                                       8)
+	{ MODKEY|ShiftMask,             XK_q,                       quit,           {0} },
 };
 
 /* button definitions */
